@@ -1,11 +1,11 @@
   applications:
   - name: dealerreiew
     routes:
-      - route: host.domain
-    memory: 128M
+      - route: dealerreiew-707.us-south.cf.appdomain.cloud
+    memory: 64M
     buildpack: python_buildpack
   - name: dealerreiew-nginx
     routes:
-      - route: host.domain/static
-    memory: 128M
+      - route: dealerreiew-707.us-south.cf.appdomain.cloud/static
+    memory: 64M
     buildpack: staticfile_buildpack
