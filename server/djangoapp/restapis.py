@@ -113,7 +113,8 @@ def analyze_review_sentiments(text):
     natural_language_understanding.set_service_url(url)
     response = natural_language_understanding.analyze(
         text = text,
-        features = Features(sentiment = SentimentOptions())
+        features = Features(sentiment = SentimentOptions()),
+        language="en"
     ).get_result()
     print(json.dumps(response))
     sentiment_score = str(response["sentiment"]["document"]["score"])

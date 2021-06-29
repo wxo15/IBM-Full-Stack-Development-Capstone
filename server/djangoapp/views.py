@@ -10,6 +10,7 @@ from datetime import datetime
 import logging
 import json
 from . import restapis
+from . import models
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -110,6 +111,7 @@ def add_review(request, dealer_id):
     context = {}
     if request.method == "GET":
         context["dealer_id"] = dealer_id
+        context['cars'] = models.CarModel.objects.filter(dealer_id = dealer_id)
         return render(request, 'djangoapp/add_review.html', context)
 
     if request.method == "POST":
@@ -118,7 +120,7 @@ def add_review(request, dealer_id):
             context["error_message"] = "Please login at first"
             context["dealer_id"] = dealer_id
             print("Not logged in!")
-            return render(request, 'djangoapp/add_review.html', context)
+            return redirect("/djangoapp/login", context)
         review = {}
         review["id"] = 0
         review["name"] = request.user.first_name + " " + request.user.last_name
@@ -127,9 +129,10 @@ def add_review(request, dealer_id):
         review["purchase"] = request.POST.get("purchasecheck") == 'on'
         if request.POST.get("purchasecheck") == 'on':
             review["purchase_date"] = request.POST["purchasedate"]
-            review["car_make"] = request.POST["car_make"]
-            review["car_model"] = request.POST["car_model"]
-            review["car_year"] = request.POST["car_year"]
+            car = models.CarModel.objects.get(pk=request.POST["car"])
+            review["car_make"] = car.make.name
+            review["car_model"] = car.name
+            review["car_year"]= car.year.strftime("%Y")
         json_payload = {}
         json_payload["review"] = review
         print(json_payload)
@@ -142,4 +145,4 @@ def add_review(request, dealer_id):
             context["error_message"] = "ERROR: Review not submitted."
             print("Failed")
         context["dealer_id"] = dealer_id
-        return render(request, 'djangoapp/add_review.html', context)
+        return redirect("/djangoapp/dealer/" + str(dealer_id), context)
