@@ -115,27 +115,31 @@ def add_review(request, dealer_id):
     if request.method == "POST":
         user = request.user
         if not user.is_authenticated:
-            context["error_message"] = "Please, login at first"
+            context["error_message"] = "Please login at first"
             context["dealer_id"] = dealer_id
+            print("Not logged in!")
             return render(request, 'djangoapp/add_review.html', context)
-
         review = {}
         review["id"] = 0
-        review["name"] = request.POST["createreviewform_name"]
+        review["name"] = request.user.first_name + " " + request.user.last_name
         review["dealership"] = dealer_id
-        review["review"] = request.POST["createreviewform_review"]
-        review["purchase"] = request.POST["createreviewform_purchase"]
-        review["purchase_date"] = request.POST["createreviewform_purchase_date"]
-        review["car_make"] = request.POST["createreviewform_car_make"]
-        review["car_model"] = request.POST["createreviewform_car_model"]
-        review["car_year"] = request.POST["createreviewform_car_year"]
+        review["review"] = request.POST["review"]
+        review["purchase"] = request.POST.get("purchasecheck") == 'on'
+        if request.POST.get("purchasecheck") == 'on':
+            review["purchase_date"] = request.POST["purchasedate"]
+            review["car_make"] = request.POST["car_make"]
+            review["car_model"] = request.POST["car_model"]
+            review["car_year"] = request.POST["car_year"]
         json_payload = {}
         json_payload["review"] = review
-        json_result = post_request("", json_payload, dealerId=dealer_id)
-        print("POST request result: ", json_result)
-        if json_result["status"] == 200:
+        print(json_payload)
+        result = restapis.post_request("https://57681ee4.us-south.apigw.appdomain.cloud/api/addreview", json_payload, dealerId=dealer_id)
+        print("POST request result: ", result)
+        if result == True:
             context["success_message"] = "Review submitted!"
+            print("Success")
         else:
             context["error_message"] = "ERROR: Review not submitted."
+            print("Failed")
         context["dealer_id"] = dealer_id
         return render(request, 'djangoapp/add_review.html', context)

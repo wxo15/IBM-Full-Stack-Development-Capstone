@@ -36,9 +36,9 @@ def get_request(url, **kwargs):
 def post_request(url, json_payload, **kwargs):
     print(kwargs)
     try:
-        response = requests.post(url, json=json_payload, params=kwargs)
+        response = requests.post(url, json=json_payload, params=kwargs).ok
     except:
-        print("Something went wrong")
+        response = "Something went wrong"
     print (response)
     return response
 
@@ -64,15 +64,16 @@ def get_dealers_from_cf(url, **kwargs):
 
 
 def get_dealer_by_id_from_cf(url, dealer_id):
-    json_result = get_req(url, id=dealer_id)
+    json_result = get_request(url, id=dealer_id)
 
     if json_result:
         dealers = json_result["entries"]
         for dealer in dealers:
-            dealer_obj = CarDealer(address=dealer["address"], city=dealer["city"], full_name=dealer["full_name"],
-                                   id=dealer["id"], lat=dealer["lat"], long=dealer["long"],
-                                   short_name=dealer["short_name"],state=dealer["state"],
-                                   st=dealer["st"], zip=dealer["zip"])
+            if dealer_id == review["id"]:
+                dealer_obj = CarDealer(address=dealer["address"], city=dealer["city"], full_name=dealer["full_name"],
+                                    id=dealer["id"], lat=dealer["lat"], long=dealer["long"],
+                                    short_name=dealer["short_name"],state=dealer["state"],
+                                    st=dealer["st"], zip=dealer["zip"])
             return dealer_obj
 
     return None
@@ -85,14 +86,15 @@ def get_dealer_reviews_from_cf(url, dealer_id):
         reviews = json_result["entries"]
         for review in reviews:
             if dealer_id == review["dealership"]:
+                print(review)
                 if review["purchase"]:
                     review_obj = DealerReview(make=review["car_make"], model=review["car_model"], 
                                         year=review["car_year"], dealer_id=review["dealership"], 
-                                        id=review["id"], name=review["name"], purchase=review["purchase"], 
+                                        name=review["name"], purchase=review["purchase"], 
                                         purchase_date=review["purchase_date"], review=review["review"])
                 else:
                     review_obj = DealerReview(dealer_id=review["dealership"], 
-                                        id=review["id"], name=review["name"], purchase=review["purchase"], 
+                                        name=review["name"], purchase=review["purchase"], 
                                         review=review["review"])
                 review_obj.sentiment = analyze_review_sentiments(review_obj.review)
                 results.append(review_obj)
