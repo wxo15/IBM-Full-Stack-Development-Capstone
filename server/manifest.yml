@@ -2,7 +2,7 @@
   - name: dealerreiew
     routes:
       - route: dealerreiew-707.us-south.cf.appdomain.cloud
-    memory: 64M
+    memory: 192M
     buildpack: python_buildpack
   - name: dealerreiew-nginx
     routes:
