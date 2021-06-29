@@ -23,6 +23,14 @@ def get_request(url, apikey=None, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
+def post_request(url, json_payload, **kwargs):
+    print(kwargs)
+    try:
+        response = requests.post(url, json=json_payload, params=kwargs)
+    except:
+        print("Something went wrong")
+    print (response)
+    return response
 
 
 def get_dealers_from_cf(url, **kwargs):
