@@ -9,6 +9,7 @@ from django.contrib import messages
 from datetime import datetime
 import logging
 import json
+from . import restapis
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -84,6 +85,13 @@ def registration_request(request):
 def get_dealerships(request):
     context = {}
     if request.method == "GET":
+        url = 'https://57681ee4.us-south.apigw.appdomain.cloud/api/dealership'
+        # Get dealers from the URL
+        dealerships = restapis.get_dealers_from_cf(url)
+        context = {"dealerships": dealerships}
+        # Concat all dealer's short name
+        #dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+        # Return a list of dealer short name
         return render(request, 'djangoapp/index.html', context)
 
 
@@ -92,7 +100,7 @@ def get_dealer_details(request, dealer_id):
     context = {}
     if request.method == "GET":
         # Get reviews from the URL
-        reviews = get_dealer_reviews_from_cf("", dealer_id)
+        reviews = restapis.get_dealer_reviews_from_cf('https://57681ee4.us-south.apigw.appdomain.cloud/api/review', dealer_id)
         context['review_list'] = reviews
         context['dealer_id'] = dealer_id
         return render(request, 'djangoapp/dealer_details.html', context)
