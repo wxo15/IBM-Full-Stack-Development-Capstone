@@ -1,36 +1,17 @@
-# Final Project Template
+# Portfolio Website
 
-The final project for this course has several steps that you must complete. 
-To give you an overview of the whole project, all the high-level steps are listed below. 
-The project is then divided into several smaller labs that give the detailed instructions for each step. 
-You must complete all the labs to successfully complete the project.
+This is a capstone project for IBM Full Stack Cloud Developer Professional Certificate.
 
-## Project Breakdown
+![screenshot](https://github.com/wxo15/IBM-Full-Stack-Development-Capstone/blob/master/how-it-works.gif)
 
-**Prework: Sign up for IBM Cloud account and create a Watson Natural language Understanding service**
-1. Create an IBM cloud account if you don't have one already.
-2. Create an instance of the Natural Language Understanding (NLU) service.
+## Links
+[IBM Full Stack Cloud Developer Professional Certificate](https://www.coursera.org/professional-certificates/ibm-full-stack-cloud-developer)
 
-**Fork the project Github repository with a project then build and deploy the template project**
-1. Fork the repository in your account
-2. Clone the repository in the theia lab environment
-3. Create static pages to finish the user stories
-4. Deploy the application on IBM Cloud
+[Link to App](http://dealerreiew-707.us-south.cf.appdomain.cloud/djangoapp)
 
-**Add user management to the application**
-1. Implement user management using the Django user authentication system.
-2. Set up continuous integration and delivery
+[Link to Admin page](http://dealerreiew-707.us-south.cf.appdomain.cloud/admin)
 
-**Implement backend services**
-1. Create cloud functions to manage dealers and reviews
-2. Create Django models and views to manage car model and car make
-3. Create Django proxy services and views to integrate dealers, reviews, and cars together
- 
-**Add dynamic pages with Django templates**
-1. Create a page that shows all the dealers
-2. Create a page that show reviews for a selected dealer
-3. Create a page that let's the end user add a review for a selected dealer
+## Description
+This is a Django app built to allow users to read reviews for cars for each dealership. A user can sign up and login to the application using Django user authentication system, which allows them to add reviews. The sentiment of the review is analysed using Watson Natural language Understanding service. New reviews are added to a IBM Cloudant database through a custom API, to be retrieved when needed. Car model and car make is managed through Django ORM, while reviews and dealershps are stored in Cloudant, accessed using custom APIs.
 
-**Containerize your application**
-1. Add deployment artifacts to your application
-2. Deploy your application
+This project is pushed to Cloud Foundary.
